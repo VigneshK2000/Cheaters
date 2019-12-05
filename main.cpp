@@ -58,17 +58,12 @@ int main()
 
 //    Get number of each file
 
-
     HashTable table;
     int j = 1;
 
     for(auto i = files.begin() + 2; i < files.end(); i++){
-
-
             string line;
-
             string filepath = dir + '/' + *i;
-
             ifstream myFile(filepath);
 
             while (getline(myFile, line)) {
@@ -78,8 +73,6 @@ int main()
             j++;
             myFile.close();
         }
-
-
 
     return 0;
 }

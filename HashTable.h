@@ -1,7 +1,3 @@
-//
-// Created by kvigg on 12/3/2019.
-//
-
 #include <cstdlib>
 #include <vector>
 #include <string>
@@ -28,5 +24,6 @@ public:
     deque<string> chunk(string sentence, unsigned int fileNum);
     int HashFunction(deque<string> words, unsigned int fileNum);
     string lineClean(string fullSen);
+//    void Insert(int key, int value);
 
 };

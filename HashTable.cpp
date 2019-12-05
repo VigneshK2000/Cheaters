@@ -1,7 +1,3 @@
-//
-// Created by kvigg on 12/3/2019.
-//
-
 #include <cstdlib>
 #include <vector>
 #include <string>
@@ -10,9 +6,11 @@
 #include "HashTable.h"
 #include <deque>
 #include <cmath>
+#include <list>
 
 HashTable::HashTable(){
-
+    hashtable->data = 0;
+    hashtable->next = NULL;
 }
 
 int HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
@@ -30,19 +28,24 @@ int HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
 
     //Hash function
     for(char c : newSentence){
-        hash = (hash + c * exponent) % 255000;
-
-        hashtable[hash].data = fileNum;
-
+        hash += (hash + c * exponent);
+        hash %= 255000;
         exponent = (exponent * base) % 255000;
     }
 
+    if(hashtable[hash].data == 0){
+        hashtable[hash].data = fileNum;
+        hashtable[hash].next = NULL;
+    }
+    else {
+        //HashNode *entry =  new HashNode;
+        HashNode *entry = NULL;
+        entry->data = fileNum;
+        hashtable[hash].next = entry;
 
 
-
-
+    }
     cout << newSentence << endl;
-
     return 0;
 
 }
@@ -75,7 +78,7 @@ deque<string> HashTable::chunk(string sentence, unsigned int fileNum) {
             chunk.push_back(word);
             n_count += 1;
             word = "";
-        } else if (i == '.'){
+        } else if (i == '.' ){
             chunk.push_back(word);
             HashFunction(chunk, fileNum);
             chunk.pop_front();
@@ -94,17 +97,21 @@ deque<string> HashTable::chunk(string sentence, unsigned int fileNum) {
     return chunk;
 }
 
-string HashTable::lineClean(string fullSen) {
+string HashTable::lineClean(string fullSen){
 
     for (int i = 0; i < fullSen.length(); i ++){
 
         if (fullSen[i] >= 65 && fullSen[i] <= 90){
             fullSen[i] += 32;
         }
+        else if(fullSen[i] < 0){
+            fullSen[i] = 0;
+        }
     }
     return fullSen;
 }
 
+//void HashTable::Insert(int key, int value){
+//    int val = HashFunction(key);
 
-
-
+//}
