@@ -45,44 +45,41 @@ int getdir (string dir, vector<string> &files)
 int main()
 {
 //    deque<string> myDeque;
-    HashTable test;
-    deque<string> check = test.chunk("Nineteen Eighty-Four was written between the years of 1945 and 1948. Orwell got the title from switching the last two numbers of the publication date. In OrwellÕs criticism of a perfect society, his book became known as one of the greatest anti-utopian novels of all time. The bookÕs message is so powerful that some say it went so far as to prevent the sinister future from realizing itself.");
-
-    test.HashFunction(check);
-
-
-    string tester;
-
-    for (auto i = check.cbegin(); i < check.cend(); i++){
-        cout << *i << endl;
-    }
+//    HashTable test;
+//    deque<string> check = test.chunk("Nineteen Eighty-Four was written between the years of 1945 and 1948. Orwell got the title from switching the last two numbers of the publication date. In OrwellÕs criticism of a perfect society, his book became known as one of the greatest anti-utopian novels of all time. The bookÕs message is so powerful that some say it went so far as to prevent the sinister future from realizing itself.");
+//
+//    test.HashFunction(check);
 
 
-//    string dir = string("sm_doc_set");
-//    vector<string> files = vector<string>();
-//
-//    getdir(dir,files);
-//
-//    for(auto i = files.begin() + 2; i < files.end(); i++){
-//
-//        string line;
-//        string test;
-//        string filepath = dir + '/' + *i;
-//
-//        ifstream myFile(filepath);
-//        while (getline(myFile,line)){
-//
-//            test = lineClean(line);
-//            cout << test << "\n";
-//
-//        }
-//        myFile.close();
-//    }
+    string dir = string("sm_doc_set");
+    vector<string> files = vector<string>();
 
-//    string test = "abcd";
-//
-//    for (char i : test){
-//        cout << i << endl;
-//    }
+    getdir(dir,files);
+
+//    Get number of each file
+
+
+    HashTable table;
+    int j = 1;
+
+    for(auto i = files.begin() + 2; i < files.end(); i++){
+
+
+            string line;
+
+            string filepath = dir + '/' + *i;
+
+            ifstream myFile(filepath);
+
+            while (getline(myFile, line)) {
+                table.chunk(line, j);
+            }
+
+            j++;
+            myFile.close();
+        }
+
+
+
     return 0;
 }

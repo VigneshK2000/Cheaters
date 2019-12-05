@@ -9,24 +9,45 @@
 #include <queue>
 #include "HashTable.h"
 #include <deque>
+#include <cmath>
 
 HashTable::HashTable(){
 
 }
 
-int HashTable::HashFunction(deque<string> words) {
-
+int HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
+    long long unsigned int key = 0;
     string sentence;
+    int hash = 0;
+    int base = 7;
+    int exponent = 1;
+    string newSentence;
+
     for (auto it = words.begin(); it < words.cend(); it++){
         sentence += *it;
     }
-    cout << sentence << endl;
+    newSentence = lineClean(sentence);
+
+    //Hash function
+    for(char c : newSentence){
+        hash = (hash + c * exponent) % 255000;
+
+        hashtable[hash].data = fileNum;
+
+        exponent = (exponent * base) % 255000;
+    }
+
+
+
+
+
+    cout << newSentence << endl;
 
     return 0;
 
 }
 
-deque<string> HashTable::chunk(string sentence) {
+deque<string> HashTable::chunk(string sentence, unsigned int fileNum) {
     int fullstop = 0;
     deque<string> chunk;
     string word;
@@ -40,11 +61,7 @@ deque<string> HashTable::chunk(string sentence) {
         charCount += 1;
         if (charCount == sentenceLength){
             chunk.push_back(word);
-            HashFunction(chunk);
-
-            while(!chunk.empty()){
-                chunk.pop_front();
-            }
+            HashFunction(chunk, fileNum);
 
             break;
         }
@@ -60,7 +77,7 @@ deque<string> HashTable::chunk(string sentence) {
             word = "";
         } else if (i == '.'){
             chunk.push_back(word);
-            HashFunction(chunk);
+            HashFunction(chunk, fileNum);
             chunk.pop_front();
             word = "";
             fullstop = 1;
@@ -68,13 +85,24 @@ deque<string> HashTable::chunk(string sentence) {
             word += i;
         }
 
-        if (n_count == 3){
-            HashFunction(chunk);
+        if (n_count == 6){
+            HashFunction(chunk, fileNum);
             chunk.pop_front();
             n_count -= 1;
         }
     }
     return chunk;
+}
+
+string HashTable::lineClean(string fullSen) {
+
+    for (int i = 0; i < fullSen.length(); i ++){
+
+        if (fullSen[i] >= 65 && fullSen[i] <= 90){
+            fullSen[i] += 32;
+        }
+    }
+    return fullSen;
 }
 
 

@@ -15,14 +15,18 @@ class HashTable{
 private:
 
     struct HashNode {
-        int data;
+        unsigned int data;
         HashNode *next;
     };
+
+//     Seg fault if size is 1 million
+    HashNode hashtable[255000];
 
 public:
 
     HashTable();
-    deque<string> chunk(string sentence);
-    int HashFunction(deque<string> words);
+    deque<string> chunk(string sentence, unsigned int fileNum);
+    int HashFunction(deque<string> words, unsigned int fileNum);
+    string lineClean(string fullSen);
 
 };
