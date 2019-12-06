@@ -1,3 +1,7 @@
+//
+// Created by kvigg on 12/3/2019.
+//
+
 #include <cstdlib>
 #include <vector>
 #include <string>
@@ -8,10 +12,26 @@
 #include <cmath>
 #include <list>
 
+
+
 HashTable::HashTable(){
-    hashtable->data = 0;
-    hashtable->next = NULL;
-}
+
+    for(int i = 0; i <= 255000; i++)
+    {
+        vector<int> row;
+        hashtable.push_back(row);
+    }
+
+    for (int i = 0; i < 25; i++){
+        for (int j = 0; j< 25; j++){
+
+            chart[i][j] = 0;
+
+        }
+    }
+
+};
+
 
 int HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
     long long unsigned int key = 0;
@@ -27,30 +47,32 @@ int HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
     newSentence = lineClean(sentence);
 
     //Hash function
-    for(char c : newSentence){
+    for(char c : newSentence) {
         hash += (hash + c * exponent);
         hash %= 255000;
         exponent = (exponent * base) % 255000;
     }
 
-    if(hashtable[hash].data == 0){
-        hashtable[hash].data = fileNum;
-        hashtable[hash].next = NULL;
-    }
-    else {
-        //HashNode *entry =  new HashNode;
-        HashNode *entry = NULL;
-        entry->data = fileNum;
-        hashtable[hash].next = entry;
+    hashtable[hash].push_back(fileNum);
 
 
-    }
-    cout << newSentence << endl;
+
+//    if(hashtable[hash].data == 0){
+//        hashtable[hash].data = fileNum;
+//        hashtable[hash].next = NULL;
+//    }
+//    else {
+//        //HashNode *entry =  new HashNode;
+//        HashNode *entry = NULL;
+//        entry->data = fileNum;
+//        hashtable[hash].next = entry;
+//    }
+    cout << newSentence << " " << fileNum << endl;
     return 0;
 
 }
 
-deque<string> HashTable::chunk(string sentence, unsigned int fileNum) {
+vector<vector<int>> HashTable::chunk(string sentence, unsigned int fileNum) {
     int fullstop = 0;
     deque<string> chunk;
     string word;
@@ -94,24 +116,40 @@ deque<string> HashTable::chunk(string sentence, unsigned int fileNum) {
             n_count -= 1;
         }
     }
-    return chunk;
+
+    return hashtable;
 }
 
 string HashTable::lineClean(string fullSen){
 
     for (int i = 0; i < fullSen.length(); i ++){
-
+        //Caps to lowercase
         if (fullSen[i] >= 65 && fullSen[i] <= 90){
             fullSen[i] += 32;
-        }
-        else if(fullSen[i] < 0){
+        } //Fake characters
+        else if(fullSen[i] < 0 || (fullSen[i] >= 33 && fullSen[i] <= 47) || (fullSen[i] >= 58 && fullSen[i] <= 64)){
             fullSen[i] = 0;
         }
     }
     return fullSen;
 }
 
-//void HashTable::Insert(int key, int value){
-//    int val = HashFunction(key);
+void HashTable::plagiarismTable(vector<vector<int>> table[]) {
 
-//}
+    for (unsigned int i = 0; i < table->size() ; i++){
+
+        for (unsigned int j = 0; j < table[i].size(); j++){
+
+            for (unsigned int k = j + 1; k < table[i].size() ;k++){
+
+                chart[j][k] += 1;
+
+            }
+        }
+
+    }
+
+}
+
+
+

@@ -11,19 +11,6 @@
 
 using namespace std;
 
-string lineClean(string line){
-    string answer = "";
-    for (auto x : line) {
-        if (x == '\n'){
-            return answer;
-//            cout << answer << endl;
-//            answer = "";
-        } else {
-            answer += x;
-        }
-    }
-    return answer;
-}
 
 /*function... might want it in some class?*/
 int getdir (string dir, vector<string> &files)
@@ -58,21 +45,32 @@ int main()
 
 //    Get number of each file
 
-    HashTable table;
-    int j = 1;
 
+    HashTable table;
+    vector<vector<int>> hashedTable;
+    int j = 1;
     for(auto i = files.begin() + 2; i < files.end(); i++){
+
+
             string line;
+
             string filepath = dir + '/' + *i;
+
             ifstream myFile(filepath);
 
             while (getline(myFile, line)) {
-                table.chunk(line, j);
+                hashedTable = table.chunk(line, j);
             }
 
             j++;
+
             myFile.close();
+
         }
+
+    table.plagiarismTable(&hashedTable);
+
+
 
     return 0;
 }

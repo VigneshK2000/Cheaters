@@ -1,3 +1,7 @@
+//
+// Created by kvigg on 12/3/2019.
+//
+
 #include <cstdlib>
 #include <vector>
 #include <string>
@@ -10,20 +14,23 @@ class HashTable{
 
 private:
 
-    struct HashNode {
-        unsigned int data;
-        HashNode *next;
-    };
+//    struct HashNode {
+//        unsigned int data;
+//        HashNode *next;
+//    };
 
 //     Seg fault if size is 1 million
-    HashNode hashtable[255000];
+    vector<vector<int>>  hashtable;
+    int chart[25][25];
+
+
 
 public:
 
     HashTable();
-    deque<string> chunk(string sentence, unsigned int fileNum);
+    vector<vector<int>> chunk(string sentence, unsigned int fileNum);
     int HashFunction(deque<string> words, unsigned int fileNum);
     string lineClean(string fullSen);
-//    void Insert(int key, int value);
+    void plagiarismTable(vector<vector<int>> table[]);
 
 };
