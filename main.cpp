@@ -42,13 +42,18 @@ int main()
     vector<string> files = vector<string>();
 
     getdir(dir,files);
+    string names[files.size()];
 
 //    Get number of each file
+    for (unsigned int i = 0;i < files.size();i++) {
+        names[i] = files[i];
+    }
 
 
     HashTable table;
-    vector<vector<int>> hashedTable;
+
     int j = 1;
+
     for(auto i = files.begin() + 2; i < files.end(); i++){
 
 
@@ -59,7 +64,7 @@ int main()
             ifstream myFile(filepath);
 
             while (getline(myFile, line)) {
-                hashedTable = table.chunk(line, j);
+                table.chunk(line, j);
             }
 
             j++;
@@ -68,9 +73,7 @@ int main()
 
         }
 
-    table.plagiarismTable(&hashedTable);
-
-
+    table.plagiarismTable(names);
 
     return 0;
 }

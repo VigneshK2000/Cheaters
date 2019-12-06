@@ -1,6 +1,3 @@
-//
-// Created by kvigg on 12/3/2019.
-//
 
 #include <cstdlib>
 #include <vector>
@@ -16,12 +13,16 @@
 
 HashTable::HashTable(){
 
-    for(int i = 0; i <= 255000; i++)
-    {
-        vector<int> row;
-        hashtable.push_back(row);
-    }
+    const int MILLION = 1000000;
+    hashtable = new vector<int>[MILLION];
 
+//    for(int i = 0; i <= MILLION; i++)
+//    {
+//        vector<int> row;
+//        hashtable.push_back(row);
+//    }
+
+    //Need to malloc in future of different doc set sizes
     for (int i = 0; i < 25; i++){
         for (int j = 0; j< 25; j++){
 
@@ -32,9 +33,15 @@ HashTable::HashTable(){
 
 };
 
+int HashTable::getSize() {
+    return 1000000;
 
-int HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
-    long long unsigned int key = 0;
+}
+
+void HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
+
+    //long long unsigned int key = 0;
+
     string sentence;
     int hash = 0;
     int base = 7;
@@ -49,30 +56,19 @@ int HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
     //Hash function
     for(char c : newSentence) {
         hash += (hash + c * exponent);
-        hash %= 255000;
-        exponent = (exponent * base) % 255000;
+        hash %= 1000000;
+        exponent = (exponent * base) % 1000000;
     }
 
     hashtable[hash].push_back(fileNum);
 
 
 
-//    if(hashtable[hash].data == 0){
-//        hashtable[hash].data = fileNum;
-//        hashtable[hash].next = NULL;
-//    }
-//    else {
-//        //HashNode *entry =  new HashNode;
-//        HashNode *entry = NULL;
-//        entry->data = fileNum;
-//        hashtable[hash].next = entry;
-//    }
-    cout << newSentence << " " << fileNum << endl;
-    return 0;
+    cout << newSentence << " " << endl;
 
 }
 
-vector<vector<int>> HashTable::chunk(string sentence, unsigned int fileNum) {
+void HashTable::chunk(string sentence, unsigned int fileNum) {
     int fullstop = 0;
     deque<string> chunk;
     string word;
@@ -116,8 +112,6 @@ vector<vector<int>> HashTable::chunk(string sentence, unsigned int fileNum) {
             n_count -= 1;
         }
     }
-
-    return hashtable;
 }
 
 string HashTable::lineClean(string fullSen){
@@ -134,22 +128,30 @@ string HashTable::lineClean(string fullSen){
     return fullSen;
 }
 
-void HashTable::plagiarismTable(vector<vector<int>> table[]) {
+void HashTable::plagiarismTable(string names[]) {
+//    cout << hashtable->size() << endl;
+//    cout << table[1].size() << " " << table[2].size() << endl;
+    int size = getSize();
+    for (unsigned int i = 0; i < size; i++) {
 
-    for (unsigned int i = 0; i < table->size() ; i++){
+        for (vector<int>::iterator j = hashtable[i].begin(); j < hashtable[i].end(); j++) {
 
-        for (unsigned int j = 0; j < table[i].size(); j++){
+            for (vector<int>::iterator k = j+1; k < hashtable[i].end(); k++) {
 
-            for (unsigned int k = j + 1; k < table[i].size() ;k++){
-
-                chart[table[i][j]][table[i][k]] += 1;
+                chart[*j][*k] += 1;
 
             }
         }
+    }
 
+    for (int i = 0; i < 25; i++) {
+        for (int j = 0; j < 25; j++) {
+
+            if (chart[i][j] > 200) {
+                cout << chart[i][j] << ": " << names[i] << "," << names[j] << endl;
+
+            }
+        }
     }
 
 }
-
-
-
