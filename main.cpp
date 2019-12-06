@@ -30,7 +30,7 @@ int getdir (string dir, vector<string> &files)
     return 0;
 }
 
-int main ( int argc, char *argv[] )
+int main ( int argc, char **argv )
 {
 //    deque<string> myDeque;
 //    HashTable test;
@@ -39,31 +39,39 @@ int main ( int argc, char *argv[] )
 //    test.HashFunction(check);
 
     int ncount =  atoi(argv[2]);
+    cout << ncount << endl;
     int col = atoi(argv[3]);
     string dir = argv[1];
+
+    cout << col << " " << dir << endl;
     vector<string> files = vector<string>();
 
     getdir(dir,files);
+
+
+    cout << files[2] << endl;
     string names[files.size()];
 
 //    Get number of each file
     for (unsigned int i = 0;i < files.size();i++) {
+	//cout << files[i] << endl;
         names[i] = files[i];
     }
 
-
+	cout << "asdf" << endl;
     HashTable table;
+	cout << "sdfgdf" <<  endl;
 
     int j = 0;
 
-    for(auto i = files.begin() + 2; i < files.end(); i++){
+    for(vector<string>::iterator i = files.begin() + 2 ; i < files.end(); i++){
 
-
+//	cout << "wqerqwer" << endl;
         string line;
 
         string filepath = dir + '/' + *i;
 
-        ifstream myFile(filepath);
+        ifstream myFile(filepath.c_str());
 
         while (getline(myFile, line)) {
             table.chunk(line, j, ncount);
@@ -76,7 +84,11 @@ int main ( int argc, char *argv[] )
 
     }
 
+	cout << "poipoipo" << endl;
+
     table.plagiarismTable(names, col);
+
+	cout << "plspls" << endl;
 
     return 0;
 }

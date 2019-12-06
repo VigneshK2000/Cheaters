@@ -20,7 +20,7 @@ private:
 
    // vector<int> *(hashtable[255000]);
    vector<int> *hashtable;
-    int chart[27][27];
+    int chart[500][500];
 
 public:
 
