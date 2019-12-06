@@ -18,8 +18,8 @@ private:
 
 //     Seg fault if size is 1 million
 
-   // vector<int> *(hashtable[255000]);
-   vector<int> *hashtable;
+    // vector<int> *(hashtable[255000]);
+    vector<int> *hashtable;
     int chart[500][500];
 
 public:
@@ -28,7 +28,7 @@ public:
     void chunk(string sentence, unsigned int fileNum, int inputn_count);
     void HashFunction(deque<string> words, unsigned int fileNum);
     string lineClean(string fullSen);
-    void plagiarismTable(string names[], int col);
+    void plagiarismTable(string names[], int col, int numFiles);
     int getSize();
 
 };

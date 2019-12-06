@@ -13,8 +13,8 @@
 HashTable::HashTable(){
 
 
-  const int MILLION = 1000000;
-  hashtable = new vector<int>[MILLION];
+    const int MILLION = 1000000;
+    hashtable = new vector<int>[MILLION];
 
 
     //Need to malloc in future of different doc set sizes
@@ -54,6 +54,7 @@ void HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
         hash %= 1000000;
         exponent = (exponent * base) % 1000000;
     }
+
 
 
 //    cout << hash << " and " << fileNum << endl;
@@ -133,7 +134,7 @@ string HashTable::lineClean(string fullSen){
 }
 
 
-void HashTable::plagiarismTable(string names[], int col) {
+void HashTable::plagiarismTable(string names[], int col, int numFiles) {
 
     int size = getSize();
     struct sortList {
@@ -142,9 +143,9 @@ void HashTable::plagiarismTable(string names[], int col) {
         int y;
     };
     //vector<sortList> list;
-    sortList list[1000] = {} ;
+    sortList list[1000] = {};
     int m = 0;
-	cout << "1" << endl;
+
     for (unsigned int i = 0; i < size; i++) {
 
         for (int j = 0; j < (hashtable[i]).size(); j++) {
@@ -155,12 +156,26 @@ void HashTable::plagiarismTable(string names[], int col) {
             }
         }
     }
-	cout << "2" << endl;
 
-    for (int i = 0; i < 25; i++) {
-        for (int j = 0; j < 25; j++) {
-           // cout << chart[i][j] << " " << i  <<names[i+2] << " " << j << names[j+2]<< endl;
+
+
+/*
+	for (int i = 0; i < numFiles; i ++){
+		for (int j = 0; j < numFiles; j++){
+			cout << chart[i][j] << endl;
+		}
+	}
+
+*/
+
+
+
+    for (int i = 0; i < numFiles; i++) {
+        for (int j = 0; j < numFiles; j++) {
+            // cout << chart[i][j] << " " << i  <<names[i+2] << " " << j << names[j+2]<< endl;
             if (chart[i][j] > col) {
+//		cout << numFiles << endl;
+//		cout << "OUOIUO" << endl;
                 list[m].value = chart[i][j];
                 list[m].x = i;
                 list[m].y = j;
@@ -170,7 +185,23 @@ void HashTable::plagiarismTable(string names[], int col) {
         }
 
     }
-	cout << "3" << endl;
+
+
+/*
+	size_t t = sizeof(list)/sizeof(sortList);
+
+	
+	for (int i =0; i < t; i++){
+		cout << list[i].value << " " << list[i].x << " " << list[i].y << endl;
+	}
+*/	
+
+
+
+
+
+
+  //  cout << "3" << endl;
 
     for (int i = 0; i < 1000; i++){
         for (int j = i + 1; j<1000; j++ ) {
@@ -189,22 +220,36 @@ void HashTable::plagiarismTable(string names[], int col) {
         }
 
     }
-	cout << "4" << endl;
-        size_t n = sizeof(list)/sizeof(sortList);
-	
+   // cout << "4" << endl;
+
+
+    size_t n = sizeof(list)/sizeof(sortList);
+
+/*
+	for (int i = 0; i < n; i++){
+		cout << list[i].value << " " << list[i].x << " " << list[i].y << endl;
+	}
+*/
+
+
+
+
+
+
+
     for (unsigned int i = 0; i < n; i++) {
 //	cout << n << endl;
-	int one =(list[i].x);
+        int one =(list[i].x);
 
-	int two = list[i].y;
-	cout << one << endl;
+        int two = list[i].y;
+    //    cout << one << endl;
 //	cout << two << endl;
 //	cout << names[2] << endl;
 //	cout << names[0] << " " << names[1] << endl;
-	if (list[i].value > 0){
-        cout << list[i].value << ": " << names[one+2] << ", " << names[two+2] << endl;
-	}
+        if (list[i].value > 0){
+            cout << list[i].value << ": " << names[one+2] << ", " << names[two+2] << endl;
+        }
     }
-	cout << "5" << endl;
+ //   cout << "5" << endl;
 
 }
