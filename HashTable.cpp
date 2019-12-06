@@ -142,7 +142,7 @@ void HashTable::plagiarismTable(vector<vector<int>> table[]) {
 
             for (unsigned int k = j + 1; k < table[i].size() ;k++){
 
-                chart[j][k] += 1;
+                chart[table[i][j]][table[i][k]] += 1;
 
             }
         }
