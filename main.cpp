@@ -7,6 +7,7 @@
 #include <fstream>
 #include <deque>
 #include "HashTable.h"
+#include <stdlib.h>
 
 
 using namespace std;
@@ -29,7 +30,7 @@ int getdir (string dir, vector<string> &files)
     return 0;
 }
 
-int main()
+int main ( int argc, char *argv[] )
 {
 //    deque<string> myDeque;
 //    HashTable test;
@@ -37,8 +38,9 @@ int main()
 //
 //    test.HashFunction(check);
 
-
-    string dir = string("sm_doc_set");
+    int ncount =  atoi(argv[2]);
+    int col = atoi(argv[3]);
+    string dir = argv[1];
     vector<string> files = vector<string>();
 
     getdir(dir,files);
@@ -52,28 +54,29 @@ int main()
 
     HashTable table;
 
-    int j = 1;
+    int j = 0;
 
     for(auto i = files.begin() + 2; i < files.end(); i++){
 
 
-            string line;
+        string line;
 
-            string filepath = dir + '/' + *i;
+        string filepath = dir + '/' + *i;
 
-            ifstream myFile(filepath);
+        ifstream myFile(filepath);
 
-            while (getline(myFile, line)) {
-                table.chunk(line, j);
-            }
-
-            j++;
-
-            myFile.close();
+        while (getline(myFile, line)) {
+            table.chunk(line, j, ncount);
 
         }
 
-    table.plagiarismTable(names);
+        j++;
+
+        myFile.close();
+
+    }
+
+    table.plagiarismTable(names, col);
 
     return 0;
 }

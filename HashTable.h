@@ -1,7 +1,3 @@
-//
-// Created by kvigg on 12/3/2019.
-//
-
 #include <cstdlib>
 #include <vector>
 #include <string>
@@ -22,16 +18,17 @@ private:
 
 //     Seg fault if size is 1 million
 
-    vector<int> *hashtable;
+   // vector<int> *(hashtable[255000]);
+   vector<int> *hashtable;
     int chart[27][27];
 
 public:
 
     HashTable();
-    void chunk(string sentence, unsigned int fileNum);
+    void chunk(string sentence, unsigned int fileNum, int inputn_count);
     void HashFunction(deque<string> words, unsigned int fileNum);
     string lineClean(string fullSen);
-    void plagiarismTable(string names[]);
+    void plagiarismTable(string names[], int col);
     int getSize();
 
 };

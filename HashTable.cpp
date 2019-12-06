@@ -1,4 +1,3 @@
-
 #include <cstdlib>
 #include <vector>
 #include <string>
@@ -13,14 +12,10 @@
 
 HashTable::HashTable(){
 
-    const int MILLION = 1000000;
-    hashtable = new vector<int>[MILLION];
 
-//    for(int i = 0; i <= MILLION; i++)
-//    {
-//        vector<int> row;
-//        hashtable.push_back(row);
-//    }
+  const int MILLION = 1000000;
+  hashtable = new vector<int>[MILLION];
+
 
     //Need to malloc in future of different doc set sizes
     for (int i = 0; i < 25; i++){
@@ -60,15 +55,21 @@ void HashTable::HashFunction(deque<string> words, unsigned int fileNum) {
         exponent = (exponent * base) % 1000000;
     }
 
-    hashtable[hash].push_back(fileNum);
+//    cout << hash << " and " << fileNum << endl;
+    (hashtable[hash]).push_back(fileNum);
+//    cout << "lkdlkdl" << endl;
+//   for(vector <int> :: iterator var = hashtable[hash].begin(); var != hashtable[hash].end(); var++)
+//       cout << hash << ": " << hashtable[hash].at(*var) << endl;
 
 
+//    cout << hashtable[hash][0] << endl;
 
-    cout << newSentence << " " << endl;
+
+//    cout << newSentence << " " << endl;
 
 }
 
-void HashTable::chunk(string sentence, unsigned int fileNum) {
+void HashTable::chunk(string sentence, unsigned int fileNum, int inputn_count) {
     int fullstop = 0;
     deque<string> chunk;
     string word;
@@ -79,11 +80,13 @@ void HashTable::chunk(string sentence, unsigned int fileNum) {
 
     for (char i : sentence){
 
+        if(i < 0 || (i >= 33 && i <= 47) || (i >= 58 && i <= 64)) {
+            continue;
+        }
         charCount += 1;
         if (charCount == sentenceLength){
             chunk.push_back(word);
             HashFunction(chunk, fileNum);
-
             break;
         }
 
@@ -98,6 +101,7 @@ void HashTable::chunk(string sentence, unsigned int fileNum) {
             word = "";
         } else if (i == '.' ){
             chunk.push_back(word);
+
             HashFunction(chunk, fileNum);
             chunk.pop_front();
             word = "";
@@ -106,8 +110,10 @@ void HashTable::chunk(string sentence, unsigned int fileNum) {
             word += i;
         }
 
-        if (n_count == 6){
+        if (n_count == inputn_count){
+
             HashFunction(chunk, fileNum);
+
             chunk.pop_front();
             n_count -= 1;
         }
@@ -116,42 +122,73 @@ void HashTable::chunk(string sentence, unsigned int fileNum) {
 
 string HashTable::lineClean(string fullSen){
 
-    for (int i = 0; i < fullSen.length(); i ++){
+    for (int i = 0; i < fullSen.length(); i ++) {
         //Caps to lowercase
-        if (fullSen[i] >= 65 && fullSen[i] <= 90){
+        if (fullSen[i] >= 65 && fullSen[i] <= 90) {
             fullSen[i] += 32;
         } //Fake characters
-        else if(fullSen[i] < 0 || (fullSen[i] >= 33 && fullSen[i] <= 47) || (fullSen[i] >= 58 && fullSen[i] <= 64)){
-            fullSen[i] = 0;
-        }
     }
     return fullSen;
 }
 
-void HashTable::plagiarismTable(string names[]) {
-//    cout << hashtable->size() << endl;
-//    cout << table[1].size() << " " << table[2].size() << endl;
+
+void HashTable::plagiarismTable(string names[], int col) {
+
     int size = getSize();
+    struct sortList {
+        int value;
+        int x;
+        int y;
+    };
+    vector<sortList> list;
+    int m = 0;
+
     for (unsigned int i = 0; i < size; i++) {
 
-        for (vector<int>::iterator j = hashtable[i].begin(); j < hashtable[i].end(); j++) {
+        for (int j = 0; j < (hashtable[i]).size(); j++) {
 
-            for (vector<int>::iterator k = j+1; k < hashtable[i].end(); k++) {
-
-                chart[*j][*k] += 1;
-
+            for (int k = j+1; k < (hashtable[i]).size(); k++) {
+                //cout << i << " "<< (hashtable[i]).at(j) << " " << (hashtable[i]).at(k) << endl;
+                chart[hashtable[i].at(j)][hashtable[i].at(k)] += 1;
             }
         }
     }
 
     for (int i = 0; i < 25; i++) {
         for (int j = 0; j < 25; j++) {
+           // cout << chart[i][j] << " " << i  <<names[i+2] << " " << j << names[j+2]<< endl;
+            if (chart[i][j] > col) {
+                list.push_back(sortList());
+                list[m].value = chart[i][j];
+                list[m].x = i;
+                list[m].y = j;
+                m++;
+                //cout << chart[i][j] << ": " << names[i+2] << ", " << names[j+2] << endl;
+            }
+        }
 
-            if (chart[i][j] > 200) {
-                cout << chart[i][j] << ": " << names[i] << "," << names[j] << endl;
+    }
+
+    for (int i = 0; i < list.size(); i++){
+        for (int j = i + 1; j<list.size(); j++ ) {
+
+            sortList temp;
+
+            if (list[j].value > list[i].value) {
+                //largest = i;
+
+                temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+
 
             }
         }
+
+    }
+
+    for (unsigned int i = 0; i < list.size(); i++) {
+        cout << list[i].value << ": " << names[list[i].x+2] << ", " << names[list[i].y+2] << endl;
     }
 
 }
